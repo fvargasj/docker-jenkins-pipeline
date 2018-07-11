@@ -35,6 +35,7 @@ node {
 	  }
 
   } catch (error) {
+  	echo 'Err: Incremental Build failed with Error: ' + error.toString()
   } finally {
     // Stop and remove database container here
     couchbase.stop()
