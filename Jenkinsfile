@@ -43,8 +43,8 @@ node {
   	echo 'Err: Incremental Build failed with Error: ' + error.toString()
   } finally {
     // Stop and remove database container here
-    sh 'docker stop db'
-    sh 'docker rm db'
+    //sh 'docker stop db'
+    //sh 'docker rm db'
     junit '**/target/surefire-reports/*.xml'
   }
 }
