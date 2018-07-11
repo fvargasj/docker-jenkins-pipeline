@@ -20,7 +20,7 @@ node {
   try {
   	  stage ('Start Couchbase Application') {
   	  	  // Start database container here
-  	  	  couchbase = docker.run('--name db -p 8091-8093:8091-8093 -p 11210:11210 arungupta/oreilly-couchbase:latest')
+  	  	  couchbase = docker.image('arungupta/oreilly-couchbase:latest').run('--name db -p 8091-8093:8091-8093 -p 11210:11210')
   	  }
 	  stage ('Run Application') {
 	      // Run application using Docker image
