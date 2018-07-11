@@ -24,7 +24,7 @@ node {
   	  }
 	  stage ('Run Application') {
 	      // Run application using Docker image
-	      sh "DB=`docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' db`"
+	      sh "export DB=`docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' db`"
 	      customImage.run('-e DB_URI=$DB')
 	  }
 	  stage ('Run Tests') {
