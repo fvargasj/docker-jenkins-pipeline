@@ -8,6 +8,7 @@ node {
   }
 
   def customImage
+  def couchbase
 
   stage('Create Docker Image') {
     dir('webapp') {
@@ -15,38 +16,28 @@ node {
     }
   }
 
-  stage ('Run Application') {
-    try {
-      // Start database container here
-      // sh 'docker run -d --name db -p 8091-8093:8091-8093 -p 11210:11210 arungupta/oreilly-couchbase:latest'
-      customImage.run('--name db -p 8091-8093:8091-8093 -p 11210:11210 arungupta/oreilly-couchbase:latest')
-      
-      // Run application using Docker image
-      sh "DB=`docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' db`"
-      sh "docker run -e DB_URI=$DB arungupta/docker-jenkins-pipeline:${env.BUILD_NUMBER}"
 
-      // Run tests using Maven
-      //dir ('webapp') {
-      //  sh 'mvn exec:java -DskipTests'
-      //}
-    } catch (error) {
-    } finally {
-      // Stop and remove database container here
-      //sh 'docker-compose stop db'
-      //sh 'docker-compose rm db'
-    }
-  }
+  try {
+  	  stage ('Start Couchbase Application') {
+  	  	  // Start database container here
+  	  	  couchbase = docker.run('--name db -p 8091-8093:8091-8093 -p 11210:11210 arungupta/oreilly-couchbase:latest')
+  	  }
+	  stage ('Run Application') {
+	      // Run application using Docker image
+	      sh "DB=`docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' db`"
+	      sh "docker run -e DB_URI=$DB arungupta/docker-jenkins-pipeline:${env.BUILD_NUMBER}"
+	  }
+	  stage ('Run Tests') {
+	  	  dir('webapp') {
+		  	sh "mvn test"
+			customImage.push()
+		  }
+	  }
 
-  stage('Run Tests') {
-    try {
-      dir('webapp') {
-      	sh "mvn test"
-	    customImage.push()
-      }
-    } catch (error) {
-
-    } finally {
-      junit '**/target/surefire-reports/*.xml'
-    }
+  } catch (error) {
+  } finally {
+    // Stop and remove database container here
+    couchbase.stop()
+    junit '**/target/surefire-reports/*.xml'
   }
 }
