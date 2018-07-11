@@ -24,7 +24,7 @@ node {
   	  }
 	  stage ('Run Application') {
 	      // Run application using Docker image
-	      dbAddress = sh (script:"DB=`docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' db` | echo $DB",
+	      dbAddress = sh (script:"`docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' db`",
     		returnStdout: true,
   		  )
   		  echo dbAddress
