@@ -7,13 +7,13 @@ node {
     }
   }
 
+  def customImage
+
   stage('Create Docker Image') {
     dir('webapp') {
-      def customImage = docker.build("arungupta/docker-jenkins-pipeline:${env.BUILD_NUMBER}")
-      customImage.withRun("--name db -p 8091-8093:8091-8093 -p 11210:11210")
+      customImage = docker.build("arungupta/docker-jenkins-pipeline:${env.BUILD_NUMBER}")
     }
   }
-
 
   stage ('Run Application') {
     try {
@@ -39,8 +39,10 @@ node {
   stage('Run Tests') {
     try {
       dir('webapp') {
-        sh "mvn test"
-        docker.build("arungupta/docker-jenkins-pipeline:${env.BUILD_NUMBER}").push()
+      	customImage.withRun('-d --name db -p 8091-8093:8091-8093 -p 11210:11210 arungupta/oreilly-couchbase:latest') {}
+	        sh "mvn test"
+	        docker.build("arungupta/docker-jenkins-pipeline:${env.BUILD_NUMBER}").push()
+        }
       }
     } catch (error) {
 
