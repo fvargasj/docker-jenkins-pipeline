@@ -43,7 +43,7 @@ node {
   	echo 'Err: Incremental Build failed with Error: ' + error.toString()
   } finally {
     // Stop and remove database container here
-    couchbase.stop()
+    //couchbase.stop()
     junit '**/target/surefire-reports/*.xml'
   }
 }
