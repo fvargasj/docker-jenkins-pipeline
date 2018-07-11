@@ -20,7 +20,7 @@ node {
   try {
   	  stage ('Start Couchbase Application') {
   	  	  // Start database container here
-  	  	  couchbase = docker.image('arungupta/oreilly-couchbase:latest').run('--name db -p 8091-8093:8091-8093 -p 11210:11210')
+  	  	  sh 'docker run -d --name db -p 8091-8093:8091-8093 -p 11210:11210 arungupta/oreilly-couchbase:latest'
   	  }
 	  stage ('Run Application') {
 	      // Run application using Docker image
@@ -43,7 +43,8 @@ node {
   	echo 'Err: Incremental Build failed with Error: ' + error.toString()
   } finally {
     // Stop and remove database container here
-    //couchbase.stop()
+    sh 'docker-compose stop db'
+    sh 'docker-compose rm db'
     junit '**/target/surefire-reports/*.xml'
   }
 }
