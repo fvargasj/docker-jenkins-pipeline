@@ -25,7 +25,8 @@ node {
 	  stage ('Run Application') {
 	      // Run application using Docker image
 	      sh "export DB=`docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' db`"
-	      customImage.run('-e DB_URI=$DB')
+	      //customImage.run('-e DB_URI=$DB')
+	      sh "docker run -e DB_URI=$DB arungupta/docker-jenkins-pipeline:${env.BUILD_NUMBER}"
 	  }
 	  stage ('Run Tests') {
 	  	  dir('webapp') {
