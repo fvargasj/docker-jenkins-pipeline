@@ -39,7 +39,7 @@ node {
   stage('Run Tests') {
     try {
       dir('webapp') {
-      	customImage.withRun('-d --name db -p 8091-8093:8091-8093 -p 11210:11210 arungupta/oreilly-couchbase:latest') {}
+      	customImage.withRun('-d --name db -p 8091-8093:8091-8093 -p 11210:11210 arungupta/oreilly-couchbase:latest') {
 	        sh "mvn test"
 	        docker.build("arungupta/docker-jenkins-pipeline:${env.BUILD_NUMBER}").push()
         }
