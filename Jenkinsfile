@@ -24,11 +24,10 @@ node {
   	  }
 	  stage ('Run Application') {
 	      // Run application using Docker image
-	      dbAddress = sh (script:"`docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' db`",
+	      DB = sh (script:"`docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' db`",
     		returnStdout: true,
   		  )
-  		  echo dbAddress
-	      sh "DB=`docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' db`"
+	      //sh "DB=`docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' db`"
 	      //customImage.run('-e DB_URI=172.17.0.2')
 	      sh "docker run -e DB_URI=$DB arungupta/docker-jenkins-pipeline:${env.BUILD_NUMBER}"
 	  }
