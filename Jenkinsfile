@@ -13,7 +13,7 @@ node {
     }
   }
 
-  stage('Running Docker Container') {}
+  stage('Running Docker Container') {
   	customImage.withRun("--name db -p 8091-8093:8091-8093 -p 11210:11210")
   }
 
