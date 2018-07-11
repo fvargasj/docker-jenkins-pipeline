@@ -22,22 +22,19 @@ node {
   	  	  // Start database container here
   	  	  sh 'docker run -d --name db -p 8091-8093:8091-8093 -p 11210:11210 arungupta/oreilly-couchbase:latest'
   	  }
-	  stage ('Run Application') {
+	  //stage ('Run Application') {
 	      // Run application using Docker image
-	      //DB = sh (script:"`docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' db`",
-    	//	returnStdout: true,
-  		  //)
-	      sh "DB=`docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' db`"
-	      //sh "echo $DB"
-	      customImage.run('-e DB_URI=172.17.0.2')
+	      //sh "DB=`docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' db`"
+
+	      //customImage.run('-e DB_URI=172.17.0.2')
 	      //sh "docker run -e DB_URI=$DB arungupta/docker-jenkins-pipeline:${env.BUILD_NUMBER}"
-	  }
-	  stage ('Run Tests') {
-	  	  dir('webapp') {
-		  	sh "mvn test"
-			customImage.push()
-		  }
-	  }
+	  //}
+	  //stage ('Run Tests') {
+	  	  //dir('webapp') {
+		  	//sh "mvn test"
+			//customImage.push()
+		  //}
+	  //}
 
   } catch (error) {
   	echo 'Err: Incremental Build failed with Error: ' + error.toString()
@@ -45,6 +42,6 @@ node {
     // Stop and remove database container here
     //sh 'docker stop db'
     //sh 'docker rm db'
-    junit '**/target/surefire-reports/*.xml'
+    //junit '**/target/surefire-reports/*.xml'
   }
 }
