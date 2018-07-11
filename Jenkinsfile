@@ -28,7 +28,7 @@ node {
     	//	returnStdout: true,
   		  //)
 	      sh "DB=`docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' db`"
-	      echo $DB
+	      sh "echo $DB"
 	      //customImage.run('-e DB_URI=172.17.0.2')
 	      sh "docker run -e DB_URI=$DB arungupta/docker-jenkins-pipeline:${env.BUILD_NUMBER}"
 	  }
