@@ -9,9 +9,14 @@ node {
 
   stage('Create Docker Image') {
     dir('webapp') {
-      docker.build("arungupta/docker-jenkins-pipeline:${env.BUILD_NUMBER}")
+      def customImage = docker.build("arungupta/docker-jenkins-pipeline:${env.BUILD_NUMBER}")
     }
   }
+
+  stage('Running Docker Container') {}
+  	customImage.withRun("--name db -p 8091-8093:8091-8093 -p 11210:11210")
+  }
+
 
   stage ('Run Application') {
     try {
